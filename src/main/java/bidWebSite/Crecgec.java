@@ -1,7 +1,9 @@
 package bidWebSite;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 
 import org.jsoup.Jsoup;
@@ -17,15 +19,26 @@ public class Crecgec {
 
     public void search(String searchDate) throws Exception {
 
-        System.out.println("开始搜索 中铁鲁班商务网 " + searchDate + " 招标信息。");
+        FileOutputStream fileStream = new FileOutputStream(new File("./txt/report.txt"));
+        BufferedOutputStream writeStream = new BufferedOutputStream(fileStream);
 
         int total = 0;
         int check = 0;
         int unorder = 0;
 
+        String message = null;
+
+        message = "开始搜索 中铁鲁班商务网 " + searchDate + " 招标信息。";
+        System.out.println(message);
+        writeStream.write(message.getBytes());
+        writeStream.flush();
+
         end: for (int i = 1; true; i++) {
 
-            System.out.println("\n开始搜索第 " + i + " 页。");
+            message = "\n开始搜索第 " + i + " 页。";
+            System.out.println(message);
+            writeStream.write(message.getBytes());
+            writeStream.flush();
 
             String url = "http://www.crecgec.com/forum.php?mod=forumdisplay&fid=2&filter=sortid&sortid=12&page=" + i;
             Document doc = Jsoup.connect(url).get();
@@ -42,11 +55,17 @@ public class Crecgec {
                 String subLinkText = subLinks.text();
 
                 if (date.compareTo(searchDate) > 0) {
-                    System.out.println("\n搜索中...");
+                    message = "\n搜索中...";
+                    System.out.println(message);
+                    writeStream.write(message.getBytes());
+                    writeStream.flush();
                     continue;
                 } else if (date.compareTo(searchDate) == 0) {
                     total++;
-                    System.out.println("\n" + linkText + "\n" + linkHref + "\r");
+                    message = "\n" + linkText + "\n" + linkHref + "\r";
+                    System.out.println(message);
+                    writeStream.write(message.getBytes());
+                    writeStream.flush();
                     File file = new File("./txt/key.txt");
                     BufferedReader bReader = new BufferedReader(new FileReader(file));
                     String key = null;
@@ -54,7 +73,10 @@ public class Crecgec {
                     while ((key = bReader.readLine()) != null) {
                         if (new String(subLinkText.getBytes(), "utf-8").indexOf(new String(key.getBytes(), "utf-8")) != -1) {
                             finder = true;
-                            System.out.println("搜索到关键字: " + key + "\r");
+                            message = "搜索到关键字: " + key + "\r";
+                            System.out.println(message);
+                            writeStream.write(message.getBytes());
+                            writeStream.flush();
                         }
                         continue;
                     }
@@ -62,22 +84,42 @@ public class Crecgec {
 
                     if (finder) {
                         check++;
-                        System.out.println("查询到关键字内容，请人工检查！");
+                        message = "查询到关键字内容，请人工检查！";
+                        System.out.println(message);
+                        writeStream.write(message.getBytes());
+                        writeStream.flush();
                     }
                 } else {
                     unorder++;
                     if (unorder == 2) {
-                        System.out.println("\n搜索结束，退出。\n");
+                        message = "\n搜索结束，退出。\n";
+                        System.out.println(message);
+                        writeStream.write(message.getBytes());
+                        writeStream.flush();
                         break end;
                     }
                 }
             }
         }
 
-        System.out.println("当前日期: " + dateTool.getCurrentDate() + ";\r");
-        System.out.println("搜索日期: " + searchDate + ";\r");
-        System.out.println("发布总数: " + total + ";\r");
-        System.out.println("需详查数: " + check + ";\r");
+        message = "当前日期: " + dateTool.getCurrentDate() + ";\r";
+        System.out.println(message);
+        writeStream.write(message.getBytes());
+        writeStream.flush();
+        message = "搜索日期: " + searchDate + ";\r";
+        System.out.println(message);
+        writeStream.write(message.getBytes());
+        writeStream.flush();
+        message = "发布总数: " + total + ";\r";
+        System.out.println(message);
+        writeStream.write(message.getBytes());
+        writeStream.flush();
+        message = "需详查数: " + check + ";\r";
+        System.out.println(message);
+        writeStream.write(message.getBytes());
+        writeStream.flush();
+
+        writeStream.close();
 
     }
 
