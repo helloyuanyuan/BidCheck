@@ -13,13 +13,13 @@ import org.jsoup.select.Elements;
 
 import tools.DateTool;
 
-public class Crecgec {
+public class Crccmall {
 
     DateTool dateTool = new DateTool();
 
     public void search(String searchDate) throws Exception {
 
-        File writeFile = new File("./txt/Crecgec " + dateTool.getCurrentDate() + " Report.txt");
+        File writeFile = new File("./txt/Crccmall " + dateTool.getCurrentDate() + " Report.txt");
 
         if (!writeFile.exists())
             writeFile.createNewFile();
@@ -33,7 +33,7 @@ public class Crecgec {
 
         String message = null;
 
-        message = "开始搜索 中铁鲁班商务网 " + searchDate + " 招标信息。";
+        message = "开始搜索 铁建商城网 " + searchDate + " 招标信息。";
         System.out.println(message);
         bWriter.write(message);
         bWriter.newLine();
@@ -45,9 +45,12 @@ public class Crecgec {
             bWriter.write(message);
             bWriter.newLine();
 
-            String url = "http://www.crecgec.com/forum.php?mod=forumdisplay&fid=2&filter=sortid&sortid=12&page=" + i;
-            Document doc = Jsoup.connect(url).get();
-            Elements links = doc.body().getElementsByAttributeValue("class", "listContent").select("a[title]");
+            String url = "https://www.crccmall.com/cms/infomation/page/list/1/" + i;
+
+            Document doc = Jsoup.connect(url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token").timeout(3000)
+                    .post();
+
+            Elements links = doc.body().getElementsByAttributeValue("class", "col-xs-10").select("tr[onclick]");
 
             for (Element link : links) {
 
@@ -57,7 +60,7 @@ public class Crecgec {
 
                 String subUrl = linkHref;
                 Document subDoc = Jsoup.connect(subUrl).get();
-                Elements subLinks = subDoc.body().getElementsByAttributeValue("class", "allNoticCont").select("p[class]");
+                Elements subLinks = subDoc.body().getElementsByAttributeValue("class", "form-list").select("p[style]");
                 String subLinkText = subLinks.text();
 
                 if (date.compareTo(searchDate) > 0) {
