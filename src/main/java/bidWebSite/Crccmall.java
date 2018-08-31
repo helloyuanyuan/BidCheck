@@ -47,18 +47,19 @@ public class Crccmall {
 
             String url = "https://www.crccmall.com/cms/infomation/page/list/1/" + i;
 
-            Document doc = Jsoup.connect(url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token").timeout(3000)
-                    .post();
+            File input = new File("./txt/temp.html");
+            Document doc = Jsoup.parse(input, "UTF-8", url);
 
             Elements links = doc.body().getElementsByAttributeValue("class", "col-xs-10").select("tr[onclick]");
 
             for (Element link : links) {
 
                 String linkText = link.text();
-                String linkHref = link.attr("abs:href");
+                String linkHref = link.attr("onclick");
                 String date = linkText.substring(linkText.length() - 19, linkText.length() - 9);
 
-                String subUrl = linkHref;
+                linkHref = linkHref.substring(13);
+                String subUrl = linkHref.substring(0, linkHref.length() - 3);
                 Document subDoc = Jsoup.connect(subUrl).get();
                 Elements subLinks = subDoc.body().getElementsByAttributeValue("class", "form-list").select("p[style]");
                 String subLinkText = subLinks.text();
@@ -155,5 +156,4 @@ public class Crccmall {
         bWriter.close();
 
     }
-
 }
