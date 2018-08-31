@@ -21,6 +21,7 @@ public class Crecgec {
 
         int total = 0;
         int check = 0;
+        int unorder = 0;
 
         end: for (int i = 1; true; i++) {
 
@@ -64,8 +65,11 @@ public class Crecgec {
                         System.out.println("查询到关键字内容，请人工检查！");
                     }
                 } else {
-                    System.out.println("\n搜索结束，退出。\n");
-                    break end;
+                    unorder++;
+                    if (unorder == 2) {
+                        System.out.println("\n搜索结束，退出。\n");
+                        break end;
+                    }
                 }
             }
         }
