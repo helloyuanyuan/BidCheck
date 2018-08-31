@@ -47,7 +47,7 @@ public class Crecgec {
 
             String url = "http://www.crecgec.com/forum.php?mod=forumdisplay&fid=2&filter=sortid&sortid=12&page=" + i;
             Document doc = Jsoup.connect(url).get();
-            Elements links = doc.body().getElementsByAttributeValue("class", "listContent").select("a[title]");
+            Elements links = doc.body().getElementsByAttributeValue("name", "moderate").select("a[href]");
 
             for (Element link : links) {
 
