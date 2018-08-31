@@ -19,7 +19,12 @@ public class Crecgec {
 
     public void search(String searchDate) throws Exception {
 
-        FileWriter fWriter = new FileWriter(new File("./txt/report.txt"));
+        File writeFile = new File("./txt/" + dateTool.getCurrentDate() + " Report.txt");
+
+        if (!writeFile.exists())
+            writeFile.createNewFile();
+
+        FileWriter fWriter = new FileWriter(writeFile);
         BufferedWriter bWriter = new BufferedWriter(fWriter);
 
         int total = 0;
