@@ -75,10 +75,10 @@ public class Crccmall {
 
                     total++;
 
-                    message = "\n" + linkText + "\n" + linkHref + "\r";
+                    message = "\n" + linkText + "\n" + subUrl + "\r";
                     System.out.println(message);
                     stringHtml.append("<br><div>" + linkText + "</div>");
-                    stringHtml.append("<div><a href=\"" + linkHref + "\" target=\"_blank\">" + linkHref + "</a></div>");
+                    stringHtml.append("<div><a href=\"" + subUrl + "\" target=\"_blank\">" + subUrl + "</a></div>");
 
                     File file = new File("./txt/key.txt");
                     BufferedReader bReader = new BufferedReader(new FileReader(file));
