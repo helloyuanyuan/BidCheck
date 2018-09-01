@@ -11,15 +11,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import tools.DateTool;
+import tools.DateUtils;
 
 public class Crecgec {
 
-    DateTool dateTool = new DateTool();
-
     public void search(String searchDate) throws Exception {
 
-        File writeFile = new File("./txt/Crecgec " + dateTool.getCurrentDate() + " Report.txt");
+        File writeFile = new File("./txt/Crecgec " + DateUtils.getCurrentDate() + " Report.txt");
 
         if (!writeFile.exists())
             writeFile.createNewFile();
@@ -129,7 +127,7 @@ public class Crecgec {
             }
         }
 
-        message = "当前日期: " + dateTool.getCurrentDate() + ";\r";
+        message = "当前日期: " + DateUtils.getCurrentDate() + ";\r";
         System.out.println(message);
         bWriter.write(message);
         bWriter.newLine();

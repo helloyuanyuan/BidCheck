@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class DateTool {
+public class DateUtils {
 
-    public String getCurrentDate() {
+    public static String getCurrentDate() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         Calendar calendar = Calendar.getInstance();
@@ -15,7 +15,7 @@ public class DateTool {
 
     }
 
-    public String getDate(int unit, int increment) {
+    public static String getDate(int unit, int increment) {
 
         Calendar date = Calendar.getInstance();
         if (unit > 0) {

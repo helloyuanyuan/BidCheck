@@ -11,15 +11,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import tools.DateTool;
+import tools.DateUtils;
+import tools.SslUtils;
 
 public class Crccmall {
 
-    DateTool dateTool = new DateTool();
-
     public void search(String searchDate) throws Exception {
 
-        File writeFile = new File("./txt/Crccmall " + dateTool.getCurrentDate() + " Report.txt");
+        File writeFile = new File("./txt/Crccmall " + DateUtils.getCurrentDate() + " Report.txt");
 
         if (!writeFile.exists())
             writeFile.createNewFile();
@@ -47,8 +46,8 @@ public class Crccmall {
 
             String url = "https://www.crccmall.com/cms/infomation/page/list/1/" + i;
 
-            File input = new File("./txt/temp.html");
-            Document doc = Jsoup.parse(input, "UTF-8", url);
+            String html = SslUtils.getRequest(url, 30000);
+            Document doc = Jsoup.parse(html);
 
             Elements links = doc.body().getElementsByAttributeValue("class", "col-xs-10").select("tr[onclick]");
 
@@ -60,7 +59,8 @@ public class Crccmall {
 
                 linkHref = linkHref.substring(13);
                 String subUrl = linkHref.substring(0, linkHref.length() - 3);
-                Document subDoc = Jsoup.connect(subUrl).get();
+                html = SslUtils.getRequest(subUrl, 30000);
+                Document subDoc = Jsoup.parse(html);
                 Elements subLinks = subDoc.body().getElementsByAttributeValue("class", "form-list").select("p[style]");
                 String subLinkText = subLinks.text();
 
@@ -133,7 +133,7 @@ public class Crccmall {
             }
         }
 
-        message = "当前日期: " + dateTool.getCurrentDate() + ";\r";
+        message = "当前日期: " + DateUtils.getCurrentDate() + ";\r";
         System.out.println(message);
         bWriter.write(message);
         bWriter.newLine();
