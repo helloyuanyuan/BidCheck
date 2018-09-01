@@ -1,10 +1,10 @@
 package bidWebSite;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.PrintStream;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,13 +17,14 @@ public class Crecgec {
 
     public void search(String searchDate) throws Exception {
 
-        File writeFile = new File("./txt/Crecgec " + DateUtils.getCurrentDate() + " Report.txt");
+        StringBuilder stringHtml = new StringBuilder();
+        PrintStream printStream = new PrintStream(new FileOutputStream("./report/鲁班商务网招标信息 " + searchDate + ".html"));
 
-        if (!writeFile.exists())
-            writeFile.createNewFile();
-
-        FileWriter fWriter = new FileWriter(writeFile);
-        BufferedWriter bWriter = new BufferedWriter(fWriter);
+        stringHtml.append("<html><head>");
+        stringHtml.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+        stringHtml.append("<title>鲁班商务网招标信息 " + searchDate + "</title>");
+        stringHtml.append("</head>");
+        stringHtml.append("<body>");
 
         int total = 0;
         int check = 0;
@@ -31,17 +32,15 @@ public class Crecgec {
 
         String message = null;
 
-        message = "开始搜索 中铁鲁班商务网 " + searchDate + " 招标信息。";
+        message = "中铁鲁班商务网 " + searchDate + " 招标信息";
         System.out.println(message);
-        bWriter.write(message);
-        bWriter.newLine();
+        stringHtml.append("<div><h2>" + message + "</h2></div>");
 
         end: for (int i = 1; true; i++) {
 
-            message = "\n开始搜索第 " + i + " 页。";
+            message = "\n第 " + i + " 页。";
             System.out.println(message);
-            bWriter.write(message);
-            bWriter.newLine();
+            stringHtml.append("<br><div><b>" + message + "</b></div>");
 
             String url = "http://www.crecgec.com/forum.php?mod=forumdisplay&fid=2&filter=sortid&sortid=12&page=" + i;
             Document doc = Jsoup.connect(url).get();
@@ -62,8 +61,7 @@ public class Crecgec {
 
                     message = "\n搜索中...";
                     System.out.println(message);
-                    bWriter.write(message);
-                    bWriter.newLine();
+                    stringHtml.append("<br><div>" + message + "</div>");
 
                     continue;
 
@@ -73,8 +71,8 @@ public class Crecgec {
 
                     message = "\n" + linkText + "\n" + linkHref + "\r";
                     System.out.println(message);
-                    bWriter.write(message);
-                    bWriter.newLine();
+                    stringHtml.append("<br><div>" + linkText + "</div>");
+                    stringHtml.append("<div><a href=\"" + linkHref + "\" target=\"_blank\">" + linkHref + "</a></div>");
 
                     File file = new File("./txt/key.txt");
                     BufferedReader bReader = new BufferedReader(new FileReader(file));
@@ -89,8 +87,7 @@ public class Crecgec {
 
                             message = "搜索到关键字: " + key + "\r";
                             System.out.println(message);
-                            bWriter.write(message);
-                            bWriter.newLine();
+                            stringHtml.append("<div style=\"color:#FF0000\"><b>" + message + "</b></div>");
 
                         }
 
@@ -106,8 +103,7 @@ public class Crecgec {
 
                         message = "查询到关键字内容，请人工检查！";
                         System.out.println(message);
-                        bWriter.write(message);
-                        bWriter.newLine();
+                        stringHtml.append("<div style=\"color:#FF0000\"><b>" + message + "</b></div>");
 
                     }
                 } else {
@@ -116,10 +112,9 @@ public class Crecgec {
 
                     if (unorder == 2) {
 
-                        message = "\n搜索结束，退出。\n";
+                        message = "\n搜索结束。\n";
                         System.out.println(message);
-                        bWriter.write(message);
-                        bWriter.newLine();
+                        stringHtml.append("<br><div>" + message + "</div><br>");
 
                         break end;
                     }
@@ -129,25 +124,23 @@ public class Crecgec {
 
         message = "当前日期: " + DateUtils.getCurrentDate() + ";\r";
         System.out.println(message);
-        bWriter.write(message);
-        bWriter.newLine();
+        stringHtml.append("<div>" + message + "</div>");
 
         message = "搜索日期: " + searchDate + ";\r";
         System.out.println(message);
-        bWriter.write(message);
-        bWriter.newLine();
+        stringHtml.append("<div>" + message + "</div>");
 
         message = "发布总数: " + total + ";\r";
         System.out.println(message);
-        bWriter.write(message);
-        bWriter.newLine();
+        stringHtml.append("<div><b>" + message + "</b></div>");
 
         message = "需详查数: " + check + ";\r";
         System.out.println(message);
-        bWriter.write(message);
-        bWriter.newLine();
+        stringHtml.append("<div style=\"color:#FF0000\"><b>" + message + "</b></div>");
 
-        bWriter.close();
+        stringHtml.append("</body></html>");
+        printStream.println(stringHtml.toString());
+        printStream.close();
 
     }
 
