@@ -11,7 +11,7 @@ import tools.DateUtils;
 public class CrccmallTest {
 
     @Test
-    @Tag("daily")
+    @Tag("test")
     public void testDateEqualsCurrentDate() throws Exception {
         Crccmall crccmall = new Crccmall();
         crccmall.search(DateUtils.getCurrentDate());
